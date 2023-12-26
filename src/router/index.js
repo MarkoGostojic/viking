@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Navbar from "../components/Navbar";
 import Radnici from "../components/Radnici";
 import SpisakRadnika from "../views/Tabele/SpisakRadnika";
+import Radnik from "../views/Tabele/Radnik";
 
 const routes = [
   {
@@ -19,6 +20,12 @@ const routes = [
     path: "/",
     name: "Radnici",
     component: Radnici,
+  },
+  {
+    path: "/Tabele/:id",
+    name: "Radnik",
+    component: Radnik,
+    props: true,
   },
   {
     path: "/Tabele",

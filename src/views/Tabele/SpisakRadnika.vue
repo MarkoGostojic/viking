@@ -5,9 +5,9 @@
         <tr>
           <th scope="col">red.br</th>
           <th scope="col">ID</th>
-          <th scope="col">IME</th>
-          <th scope="col">PREZIME</th>
+          <th scope="col">IME i PREZIME</th>
           <th scope="col">AKTIVAN</th>
+          <th scope="col">PLATA</th>
         </tr>
       </thead>
       <tbody
@@ -16,15 +16,23 @@
         class="table-group-divider"
       >
         <tr>
-          <th>{{ n + index }}</th>
-          <th>{{ radnik.id }}</th>
-          <td>{{ radnik.ime }}</td>
-          <td>{{ radnik.prezime }}</td>
+          <td>{{ n + index }}</td>
+          <td>{{ radnik.id }}</td>
+          <td>
+            <router-link
+              class="detail-radnik"
+              :to="{ name: 'Radnik', params: { id: radnik.id } }"
+              >{{ radnik.ime }} {{ radnik.prezime }}</router-link
+            >
+          </td>
 
           <td>
             <div class="btn btn-dark" @click="handleUpdate(radnik)">
-              {{ radnik.aktivan }}
+              {{ radnik.aktivan ? "Da" : "Ne" }}
             </div>
+          </td>
+          <td>
+            {{ radnik.plata }}
           </td>
         </tr>
       </tbody>
@@ -35,8 +43,10 @@
 <script>
 import { ref } from "vue";
 import getCollection from "../../composables/getCollection";
+import router from "@/router";
 export default {
   props: { handleUpdate: Function },
+
   setup() {
     const { documents: radnici } = getCollection("radnici");
     const n = ref(1);
@@ -46,4 +56,11 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.detail-radnik {
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(127, 165, 255, 0.517);
+  }
+}
+</style>

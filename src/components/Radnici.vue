@@ -1,7 +1,10 @@
 <template>
   <div class="radnici">
     <div class="tabela">
-      <SpisakRadnika :handleUpdate="handleUpdate" />
+      <SpisakRadnika
+        :handleUpdate="handleUpdate"
+        :handleUpdatePlata="handleUpdatePlata"
+      />
     </div>
 
     <div>
@@ -31,6 +34,13 @@
             v-model="prezime"
             placeholder="prezime"
           />
+          <input
+            class="form-text"
+            type="number"
+            required
+            v-model="plata"
+            placeholder="početna plata"
+          />
         </div>
         <button class="btn btn-light">dodaj radnika</button>
       </form>
@@ -40,7 +50,7 @@
 
 <script>
 import { ref } from "vue";
-import { db } from "../firebase/config";
+import { db, serverTimestamp } from "../firebase/config";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import router from "@/router";
 
@@ -50,13 +60,16 @@ export default {
   setup() {
     const ime = ref("");
     const prezime = ref("");
+    const plata = ref(null);
     const aktivan = ref(true);
     const addForm = ref(false);
+
     const handleRadnik = async () => {
       const colRef = collection(db, "radnici");
       await addDoc(colRef, {
         ime: ime.value,
         prezime: prezime.value,
+        plata: plata.value,
         aktivan: aktivan.value,
       });
       addForm.value = false;
@@ -70,7 +83,16 @@ export default {
         aktivan: !radnik.aktivan,
       });
     };
-    return { ime, prezime, aktivan, addForm, handleRadnik, handleUpdate };
+
+    return {
+      ime,
+      prezime,
+      plata,
+      aktivan,
+      addForm,
+      handleRadnik,
+      handleUpdate,
+    };
   },
 };
 </script>

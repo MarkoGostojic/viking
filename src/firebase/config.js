@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { serverTimestamp } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyCqgNu6B0NwF-uQlrzLjBqEYLfzcV902zE",
   authDomain: "gradiliste-63a85.firebaseapp.com",
@@ -12,4 +13,4 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const db = getFirestore();
 
-export { db };
+export { db, serverTimestamp };
