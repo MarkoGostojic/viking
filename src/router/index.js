@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Navbar from "../components/Navbar";
 import Radnici from "../components/Radnici";
+import Gradilista from "../components/Gradilista";
 import SpisakRadnika from "../views/Tabele/SpisakRadnika";
+import SpisakGradilista from "../views/Tabele/SpisakGradilista";
 import Radnik from "../views/Tabele/Radnik";
 
 const routes = [
@@ -22,6 +24,11 @@ const routes = [
     component: Radnici,
   },
   {
+    path: "/",
+    name: "Gradilista",
+    component: Gradilista,
+  },
+  {
     path: "/Tabele/:id",
     name: "Radnik",
     component: Radnik,
@@ -31,6 +38,11 @@ const routes = [
     path: "/Tabele",
     name: "SpisakRadnika",
     component: SpisakRadnika,
+  },
+  {
+    path: "/Tabele",
+    name: "SpisakGradilista",
+    component: SpisakGradilista,
   },
 ];
 

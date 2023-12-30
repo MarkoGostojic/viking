@@ -31,9 +31,11 @@
               {{ radnik.aktivan ? "Da" : "Ne" }}
             </div>
           </td>
-          <td>
-            {{ radnik.plata }}
-          </td>
+          <div>
+            <td class="btn btn-light" @click="editedPlata(radnik)">
+              {{ radnik.plata }}
+            </td>
+          </div>
         </tr>
       </tbody>
     </table>
@@ -41,17 +43,50 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import getCollection from "../../composables/getCollection";
 import router from "@/router";
+import { doc, serverTimestamp, updateDoc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/config";
 export default {
   props: { handleUpdate: Function },
 
   setup() {
     const { documents: radnici } = getCollection("radnici");
-    const n = ref(1);
 
-    return { radnici, n };
+    const n = ref(1);
+    const editedPlata = async (radnik) => {
+      const newPlata = prompt("Enter new value for plata:", radnik.plata);
+
+      if (newPlata !== null) {
+        const docRef = doc(db, "radnici", radnik.id);
+
+        try {
+          const timestamp = new Date().toISOString();
+          await updateDoc(docRef, {
+            plata: parseFloat(newPlata),
+            plataLastUpdated: serverTimestamp(),
+            plataChanges: [
+              ...radnik.plataChanges,
+              { value: parseFloat(newPlata), timestamp },
+            ],
+          });
+          const docSnap = await getDoc(docRef);
+          const updatedPlataArray = docSnap.data().plataChanges || [];
+          radnik.plataChanges = updatedPlataArray;
+          // radnik.plata = parseFloat(newPlata);
+        } catch (error) {
+          console.error("Error updating document: ", error);
+        }
+      }
+    };
+    const updatedPlata = computed(() => {
+      return radnici.reduce((acc, radnik) => {
+        acc.push(radnik.plataChanges);
+        return acc;
+      }, []);
+    });
+    return { radnici, n, editedPlata, updatedPlata };
   },
 };
 </script>
