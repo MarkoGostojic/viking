@@ -6,12 +6,24 @@ import Gradilista from "../components/Gradilista";
 import SpisakRadnika from "../views/Tabele/SpisakRadnika";
 import SpisakGradilista from "../views/Tabele/SpisakGradilista";
 import Radnik from "../views/Tabele/Radnik";
+import Signup from "../views/auth/Signup";
+import Login from "../views/auth/Login";
+import { auth } from "../firebase/config";
+const requireAuth = (to, from, next) => {
+  let user = auth.currentUser;
+  if (!user) {
+    next({ name: "Login" });
+  } else {
+    next();
+  }
+};
 
 const routes = [
   {
     path: "/",
     name: "home",
     component: Home,
+    beforeEnter: requireAuth,
   },
   {
     path: "/",
@@ -28,6 +40,7 @@ const routes = [
     name: "Gradilista",
     component: Gradilista,
   },
+
   {
     path: "/Tabele/:id",
     name: "Radnik",
@@ -43,6 +56,16 @@ const routes = [
     path: "/Tabele",
     name: "SpisakGradilista",
     component: SpisakGradilista,
+  },
+  {
+    path: "/auth",
+    name: "Signup",
+    component: Signup,
+  },
+  {
+    path: "/auth",
+    name: "Login",
+    component: Login,
   },
 ];
 

@@ -8,6 +8,13 @@
   >
 </template>
 
-<script></script>
+<script>
+export default {};
+</script>
 
-<style lang="scss"></style>
+<style lang="scss">
+h1 {
+  margin: 20px;
+  text-align: center;
+}
+</style>
