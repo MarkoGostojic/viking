@@ -1,9 +1,7 @@
 <template>
   <div class="gradilista">
     <SpisakGradilista :handleUpdate="handleUpdate" />
-    <div class="tabela">
-      <!-- <SpisakGradilista :handleUpdate="handleUpdate" /> -->
-    </div>
+    <div class="tabela"></div>
 
     <div>
       <div v-if="!addForm">

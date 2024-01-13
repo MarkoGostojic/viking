@@ -1,40 +1,22 @@
 <template>
-  <table class="table table-primary table-striped-columns">
-    <thead>
-      <tr>
-        <th scope="col">IME i PREZIME</th>
-        <th scope="col">ID</th>
-        <th scope="col">AKTIVAN</th>
-        <th scope="col">PLATA</th>
-        <th scope="col">DATUM NOVE PLATE</th>
-      </tr>
-    </thead>
-    <tbody v-if="radnik">
-      <tr>
-        <td>{{ radnik.ime }} {{ radnik.prezime }}</td>
-        <td>{{ id }}</td>
-        <td>
-          {{ radnik.aktivan ? "Da" : "Ne" }}
-        </td>
+  <div v-if="radnik">
+    <h1>{{ radnik.ime }} {{ radnik.prezime }}</h1>
+    <h2>vrednost radnog sata {{ radnik.plata }} RSD</h2>
 
-        <td>
-          <div v-for="p in radnik.plataChanges" :key="p.value">
-            <span>{{ p.value }}</span>
-          </div>
-        </td>
-        <td>
-          <div v-for="p in radnik.plataChanges" :key="p.value">
-            {{ formatTimestamp(p.timestamp) }}
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <h2>Ostvarena plata u mesecu {{ radnik.plata * totalHours }}</h2>
+    <h2>Total Hours: {{ totalHours }}</h2>
+    <h2>terenski dodatak ???</h2>
+
+    <FullCalendar
+      :radnik="radnik"
+      :radnikId="id"
+      @total-hours-updated="updateTotalHours"
+    />
+  </div>
 
   <div class="btn btn-dark">
     <button @click="backToRadnici">povratak na tabelu</button>
   </div>
-  <FullCalendar />
 </template>
 
 <script>
@@ -42,12 +24,18 @@ import { ref, onMounted } from "vue";
 import { db } from "@/firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import router from "@/router";
+import FullCalendar from "@/components/FullCalendar.vue";
 
 export default {
+  components: { FullCalendar },
   props: ["id"],
 
   setup(props) {
     const radnik = ref(null);
+    const totalHours = ref(0);
+    const updateTotalHours = (newTotalHours) => {
+      totalHours.value = newTotalHours;
+    };
     const formatTimestamp = (timestamp) => {
       const date = new Date(timestamp);
       return date.toLocaleString();
@@ -58,16 +46,22 @@ export default {
 
       if (docSnap.exists()) {
         radnik.value = docSnap.data();
-        // console.log(radnik.value);
       } else {
         console.log("Document does not exist!");
       }
     });
+
     const backToRadnici = () => {
       router.push({ name: "Radnici" });
     };
 
-    return { radnik, backToRadnici, formatTimestamp };
+    return {
+      radnik,
+      backToRadnici,
+      formatTimestamp,
+      totalHours,
+      updateTotalHours,
+    };
   },
 };
 </script>

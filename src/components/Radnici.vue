@@ -2,6 +2,7 @@
   <div class="radnici">
     <div>
       <SpisakRadnika :handleUpdate="handleUpdate" />
+      <FullCalendar />
     </div>
 
     <div>
@@ -79,6 +80,7 @@ export default {
       ime.value = "";
       prezime.value = "";
     };
+
     const handleUpdate = async (radnik) => {
       const docRef = doc(db, "radnici", radnik.id);
 

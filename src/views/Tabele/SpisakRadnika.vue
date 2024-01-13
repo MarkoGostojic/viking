@@ -8,9 +8,6 @@
           <th scope="col">IME i PREZIME</th>
           <th scope="col">AKTIVAN</th>
           <th scope="col">PLATA</th>
-          <!-- start -->
-          <!-- <th scope="col">ukupna plata</th> -->
-          <!-- end -->
         </tr>
       </thead>
       <tbody
@@ -39,16 +36,10 @@
               {{ radnik.plata }}
             </td>
           </div>
-          <!-- change start -->
-          <!-- <td>
-            {{ calculatePlataForMonth(radnik.plataChanges) }}
-          </td> -->
-          <!-- change end-->
         </tr>
       </tbody>
     </table>
   </div>
-  <!-- <v-btn class="bg-red" @click="showMessage">Click me</v-btn> -->
 </template>
 
 <script>
@@ -64,28 +55,6 @@ export default {
     const { documents: radnici } = getCollection("radnici");
 
     const n = ref(1);
-
-    // start
-    // const calculatePlataForMonth = (plataChanges) => {
-    //   const currentMonth = new Date()
-    //     .toISOString()
-    //     .split("-")
-    //     .slice(0, 2)
-    //     .join("-");
-
-    //   const filteredPlataChanges = plataChanges.filter((change) =>
-    //     change.timestamp.startsWith(currentMonth)
-    //   );
-
-    //   const sumPlata = filteredPlataChanges.reduce(
-    //     (total, change) => total + change.value,
-    //     0
-    //   );
-
-    //   return sumPlata.toFixed(2);
-    // };
-    // end
-
     const editedPlata = async (radnik) => {
       const newPlata = prompt("Enter new value for plata:", radnik.plata);
 
@@ -105,7 +74,6 @@ export default {
           const docSnap = await getDoc(docRef);
           const updatedPlataArray = docSnap.data().plataChanges || [];
           radnik.plataChanges = updatedPlataArray;
-          // radnik.plata = parseFloat(newPlata);
         } catch (error) {
           console.error("Error updating document: ", error);
         }
